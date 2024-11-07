@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web App Screens</title>
+    <style>
+        /* Стили для скрытия и отображения экранов */
+        .screen { display: none; }
+        .active { display: block; }
+
+        /* Стили для кнопок */
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 0, 255, 0.2); /* Синий квадрат */
+            cursor: pointer;
+        }
+        .next-btn {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            width: 200px;
+            height: 50px;
+            background-color: rgba(255, 0, 0, 0.2); /* Красный квадрат */
+            cursor: pointer;
+        }
+
+        /* Окно для изображения на последнем экране */
+        .image-window {
+            width: 300px;
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+            margin: 20px;
+        }
+        .zoomable-image {
+            transition: transform 0.3s;
+            cursor: grab;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Первый экран -->
+<div id="screen1" class="screen active">
+    <img src="images/1.png" alt="Screen 1" style="width:100%;">
+    <div class="next-btn" onclick="goToScreen('screen2')"></div>
+</div>
+
+<!-- Второй экран -->
+<div id="screen2" class="screen">
+    <img src="images/2.png" alt="Screen 2" style="width:100%;">
+    <div class="back-btn" onclick="goToScreen('screen1')"></div>
+    <div class="next-btn" onclick="goToScreen('screen3')"></div>
+</div>
+
+<!-- Третий экран -->
+<div id="screen3" class="screen">
+    <img src="images/3.png" alt="Screen 3" style="width:100%;">
+    <div class="back-btn" onclick="goToScreen('screen2')"></div>
+    <div class="next-btn" onclick="goToScreen('screen4')"></div>
+</div>
+
+<!-- Четвертый экран -->
+<div id="screen4" class="screen">
+    <img src="images/4.png" alt="Screen 4" style="width:100%;">
+    <div class="back-btn" onclick="goToScreen('screen3')"></div>
+    <div class="next-btn" onclick="goToScreen('screen5')"></div>
+</div>
+
+<!-- Пятый экран с изображением -->
+<div id="screen5" class="screen">
+    <img src="images/5.png" alt="Screen 5" style="width:100%;">
+    <div class="back-btn" onclick="goToScreen('screen4')"></div>
+    <div class="image-window">
+        <img src="images/photo.png" alt="Zoomable Image" id="zoomImage" class="zoomable-image">
+    </div>
+</div>
+
+
+
+<script>
+    // Функция для перехода между экранами
+    function goToScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    // Функция для зума изображения
+    let scale = 1;
+    const zoomImage = document.getElementById('zoomImage');
+
+    zoomImage.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        scale += e.deltaY * -0.01;
+        scale = Math.min(Math.max(1, scale), 3); // лимит зума от 1 до 3
+        zoomImage.style.transform = `scale(${scale})`;
+    });
+</script>
+</body>
+</html>
